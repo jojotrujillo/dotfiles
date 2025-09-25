@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Testing SSH agent forwarding
+ssh -T git@github.com
+if [ $? -ne 1 ]; then
+    echo "Unsuccessful SSH connection attempt"
+    exit 1
+fi
+
+sudo apt update
+
+if ! command -v git &> /dev/null; then
+    sudo apt -y install git
+fi
+
+git clone git@github.com:jojotrujillo/dotfiles.git $HOME/source/repos/dotfiles
+
+pushd $HOME/source/repos/dotfiles
+export DEV_ENV=$(pwd)
+./run
+popd
