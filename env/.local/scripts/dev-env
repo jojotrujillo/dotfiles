@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+(
+cd $HOME/source/repos/dotfiles
+./dev-env
+hash -r
+)
