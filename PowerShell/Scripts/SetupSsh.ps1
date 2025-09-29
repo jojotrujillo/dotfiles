@@ -112,12 +112,14 @@ try {
             $portForwardings = VBoxManage showvminfo $DistroName --machinereadable | Select-String '^Forwarding\([0-9]+\)="SSH Port Forwarding,tcp,.*,22"$'
             if ($portForwardings.Count -eq 0) {
                 Log -Message "No existing SSH port forwarding found for $DistroName. Adding new rule to forward host port $PortToForward to guest port 22." -TypeOfMessage "warning"
+                # TODO: Need to further debug this. Perhaps the VM needs to be powered in headless mode first?
                 VBoxManage modifyvm $DistroName --natpf1 "SSH Port Forwarding,tcp,,$PortToForward,,22"
             } else {
                 Log -Message "Existing SSH port forwarding found for $DistroName. No changes made." -TypeOfMessage "info"
             }
         }
-        Invoke-RemoteCommand -platform $Platform -distro $DistroName -command "echo $plainSignal | sudo -S apt update && sudo -S apt install openssh-server" -action "run" -signal $plainSignal -username $Username
+        # TODO: Cleanup forwarded commands
+        Invoke-RemoteCommand -platform $Platform -distro $DistroName -command "echo $plainSignal | sudo -S DEBIAN_FRONTEND=noninteractive apt -y update && sudo -S DEBIAN_FRONTEND=noninteractive apt -y install openssh-server" -action "run" -signal $plainSignal -username $Username
         Invoke-RemoteCommand -platform $Platform -distro $DistroName -command "echo $plainSignal | sudo -S systemctl enable --now ssh" -action "run" -signal $plainSignal -username $Username
         $sshStatusRaw = Invoke-RemoteCommand -platform $Platform -distro $DistroName -command "echo $plainSignal | sudo -S systemctl status ssh" -action "run" -signal $plainSignal -username $Username
     }
@@ -133,7 +135,8 @@ try {
 
     Log -DryRun $DryRun -Message "Status of $DistroName's SSH server on ${Platform}: $sshStatus." -TypeOfMessage "info"
     if ($sshStatus -eq "Running") {
-        $resourcesWinPath = Join-Path $PSScriptRoot "resources"
+        # TODO: Finalize a path to resources from repository directory
+        $resourcesWinPath = Join-Path $PSScriptRoot "..\..\resources"
         $resourcesPath = Convert-WinToWslPath -winPath $resourcesWinPath
 
         $sshPublicKeyWinPath = Join-Path $env:USERPROFILE ".ssh\$SshKeyFileName"

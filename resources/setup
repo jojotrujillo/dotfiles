@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Testing SSH agent forwarding
 ssh -T git@github.com
 if [ $? -ne 1 ]; then
