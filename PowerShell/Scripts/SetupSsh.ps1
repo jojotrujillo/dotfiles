@@ -19,6 +19,9 @@ param (
     [string]$TargetDir2,
 
     [Parameter(Mandatory=$true)]
+    [string]$TargetDir3,
+
+    [Parameter(Mandatory=$true)]
     [string]$SshKeyFileName,
 
     [Parameter(Mandatory=$true)]
@@ -108,12 +111,31 @@ try {
     } else {
         $plainSignal  = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureSignal))
 
+        # VirtualBox VM needs to be powered off for modifyvm command to work
         if ($Platform -eq "VBox") {
             $portForwardings = VBoxManage showvminfo $DistroName --machinereadable | Select-String '^Forwarding\([0-9]+\)="SSH Port Forwarding,tcp,.*,22"$'
+            
             if ($portForwardings.Count -eq 0) {
                 Log -Message "No existing SSH port forwarding found for $DistroName. Adding new rule to forward host port $PortToForward to guest port 22." -TypeOfMessage "warning"
-                # TODO: Need to further debug this. Perhaps the VM needs to be powered in headless mode first?
+
                 VBoxManage modifyvm $DistroName --natpf1 "SSH Port Forwarding,tcp,,$PortToForward,,22"
+                VBoxManage startvm $DistroName --type gui
+
+                Log -Message "Waiting 60 seconds for VM to boot up..." -TypeOfMessage "warning"
+                Start-Sleep -Seconds 60
+
+                $vmRunning = $false
+                while (-not $vmRunning) {
+                    $vmStatus = (VBoxManage showvminfo $DistroName --machinereadable | Select-String "VMState=").ToString().Split('=')[1].Trim().Replace('"', '')
+
+                    if ($vmStatus -eq "running") {
+                        $vmRunning = $true
+                        Log -Message "VM '$DistroName' is now running. Continuing script execution." -TypeOfMessage "warning"
+                    } else {
+                        Log -Message "VM '$DistroName' is not yet running (Current status: $vmStatus). Waiting another 60 seconds..." -TypeOfMessage "warning"
+                        Start-Sleep -Seconds 60
+                    }
+                }
             } else {
                 Log -Message "Existing SSH port forwarding found for $DistroName. No changes made." -TypeOfMessage "info"
             }
@@ -135,19 +157,28 @@ try {
 
     Log -DryRun $DryRun -Message "Status of $DistroName's SSH server on ${Platform}: $sshStatus." -TypeOfMessage "info"
     if ($sshStatus -eq "Running") {
-        # TODO: Finalize a path to resources from repository directory
         $resourcesWinPath = Join-Path $PSScriptRoot "..\..\resources"
         $resourcesPath = Convert-WinToWslPath -winPath $resourcesWinPath
 
         $sshPublicKeyWinPath = Join-Path $env:USERPROFILE ".ssh\$SshKeyFileName"
         $sshPublicKeyPath = Convert-WinToWslPath -winPath $sshPublicKeyWinPath
 
+        $gitConfigPattern = Join-Path $env:USERPROFILE ".gitconfig*"
+        $gitConfigFiles = Get-ChildItem -Path $gitConfigPattern -File
+        
         Log -DryRun $DryRun -Message "Copying resources directory to $DistroName on ${Platform}." -TypeOfMessage "info"
         Log -DryRun $DryRun -Message "Copying SSH public key to $DistroName on ${Platform}." -TypeOfMessage "info"
-
+        Log -DryRun $DryRun -Message "Copying Git configs to $DistroName on ${Platform}." -TypeOfMessage "info"
+        
         if (-not $DryRun) {
             Invoke-RemoteCommand -platform $Platform -distro $DistroName -command "cp -r $resourcesPath ~/source" -action "copyto" -signal $plainSignal -fromDir "$resourcesWinPath" -toDir $TargetDir1 -username $Username
             Invoke-RemoteCommand -platform $Platform -distro $DistroName -command "cp $sshPublicKeyPath ~/.ssh" -action "copyto" -signal $plainSignal -fromDir "$sshPublicKeyWinPath" -toDir $TargetDir2 -username $Username
+            foreach ($file in $gitConfigFiles) {
+                $gitConfigWinPath = $file.FullName
+                $gitConfigPath = Convert-WinToWslPath -winPath $gitConfigWinPath
+
+                Invoke-RemoteCommand -platform $Platform -distro $DistroName -command "cp $gitConfigPath ~/" -action "copyto" -signal $plainSignal -fromDir "$gitConfigWinPath" -toDir $TargetDir3 -username $Username
+            }
         }
         
         if ($Platform -eq "WSL") {
