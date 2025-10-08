@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+paru -S dolphin hyprpaper otf-font-awesome pavucontrol power-profiles-daemon waybar
+
+# For waybar to work
+if id -nG $USER | grep -qw input; then
+    echo "User '$USER' is already in the 'input' group."
+else
+    echo "Adding '$USER' to 'input' group."
+
+    sudo usermod -aG input $USER
+fi

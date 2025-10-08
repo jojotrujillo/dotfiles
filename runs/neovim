@@ -1,9 +1,3 @@
 #!/usr/bin/env bash
 
-sudo apt install ninja-build gettext cmake curl build-essential ripgrep
-
-git clone -b v0.11.4 git@github.com:neovim/neovim.git $HOME/source/repos/neovim
-
-cd $HOME/source/repos/neovim
-make CMAKE_BUILD_TYPE=RelWithDebInfo
-sudo make install
+sudo pacman -S neovim wl-clipboard

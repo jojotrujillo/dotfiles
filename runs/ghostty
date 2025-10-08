@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
 
-sudo snap install ghostty --classic
-
-# LIBGL_ALWAYS_SOFTWARE=1 ghostty
+sudo pacman -S ghostty
