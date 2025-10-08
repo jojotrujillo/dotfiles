@@ -29,3 +29,5 @@ fi
 # Second entry is for the go installation, https://go.dev/doc/install,
 # but the first entry is for go tools and utilities.
 export PATH="$HOME/go/bin:/usr/local/go/bin:$PATH"
+
+eval "$(fzf --bash)"
