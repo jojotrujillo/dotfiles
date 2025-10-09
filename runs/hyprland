@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-paru -S dolphin hyprpaper otf-font-awesome pavucontrol power-profiles-daemon waybar
+paru -S dolphin hyprpaper hyprsunset hyprsysteminfo otf-font-awesome pavucontrol power-profiles-daemon qt6ct \
+	ttf-font-awesome ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols waybar
 
 # For waybar to work
 if id -nG $USER | grep -qw input; then
