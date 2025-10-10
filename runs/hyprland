@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-paru -S dolphin hyprpaper hyprsunset hyprsysteminfo otf-font-awesome pavucontrol power-profiles-daemon qt6ct \
+paru -S dolphin hyprsunset hyprsysteminfo kvantum noto-fonts noto-fonts-cjk noto-fonts-emoji \
+	otf-font-awesome papirus-icon-theme pavucontrol power-profiles-daemon qt6ct-kde \
 	ttf-font-awesome ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols waybar
 
 # For waybar to work

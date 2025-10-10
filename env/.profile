@@ -31,7 +31,3 @@ fi
 export PATH="$HOME/go/bin:/usr/local/go/bin:$PATH"
 
 eval "$(fzf --bash)"
-
-# See https://wiki.archlinux.org/title/Qt#Configuration_of_Qt_5/6_applications_under_environments_other_than_KDE_Plasma
-export XDG_CURRENT_DESKTOP="KDE"
-export QT_QPA_PLATFORMTHEME="qt6ct"
