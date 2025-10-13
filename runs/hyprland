@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-paru -S dolphin hyprsunset hyprsysteminfo kvantum noto-fonts noto-fonts-cjk noto-fonts-emoji \
-	otf-font-awesome papirus-icon-theme pavucontrol power-profiles-daemon qt6ct-kde \
-	ttf-font-awesome ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols waybar
+paru -S breezex-cursor-theme dolphin hyprsunset hyprsysteminfo kvantum noto-fonts noto-fonts-cjk \
+	noto-fonts-emoji otf-font-awesome papirus-icon-theme pavucontrol power-profiles-daemon \
+	qt6ct-kde ttf-font-awesome ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols waybar
 
 # For waybar to work
 if id -nG $USER | grep -qw input; then

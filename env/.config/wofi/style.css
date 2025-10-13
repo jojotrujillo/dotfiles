@@ -1,0 +1,40 @@
+window {
+    background-color: rgba(30, 30, 30, 0.9); /* Dark background */
+    border: 1px solid rgba(60, 60, 60, 0.9); /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    font-family: sans-serif; /* Common font */
+    font-size: 14px;
+    color: #e0e0e0; /* Light text color */
+}
+
+#input {
+    background-color: rgba(45, 45, 45, 0.9); /* Slightly lighter input background */
+    border: 1px solid rgba(70, 70, 70, 0.9);
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 5px;
+    color: #e0e0e0;
+}
+
+#outer-box {
+    margin: 10px;
+}
+
+#scroll {
+    margin-top: 5px;
+}
+
+#entry {
+    padding: 5px 10px;
+    margin: 2px 0;
+}
+
+#entry:selected {
+    background-color: rgba(60, 120, 180, 0.7); /* Accent color for selected item */
+    border-radius: 3px;
+    color: #ffffff; /* White text on selected item */
+}
+
+#text {
+    margin-left: 5px;
+}
