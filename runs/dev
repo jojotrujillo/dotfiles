@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-paru -S bitwarden-bin fastfetch fzf google-chrome jq parallel
+paru -S bitwarden-bin fzf google-chrome jq parallel
