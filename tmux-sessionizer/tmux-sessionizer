@@ -8,7 +8,7 @@ PANE_CACHE_FILE="$PANE_CACHE_DIR/panes.cache"
 # config file example
 # ------------------------
 # # file: ~/.config/tmux-sessionizer/tmux-sessionizer.conf
-# # If set this override the default TS_SEARCH_PATHS (~/ ~/personal ~/personal/dev/env/.config)
+# # If set this override the default TS_SEARCH_PATHS (~/ ~/source ~/source/repos/dotfiles/env/.config)
 # TS_SEARCH_PATHS=(~/)
 # # If set this add additional search paths to the default TS_SEARCH_PATHS
 # # The number prefix is the depth for the Path [OPTIONAL]
@@ -210,7 +210,7 @@ cleanup_dead_panes() {
 sanity_check
 
 # if TS_SEARCH_PATHS is not set use default
-[[ -n "$TS_SEARCH_PATHS" ]] || TS_SEARCH_PATHS=(~/ ~/personal ~/personal/dev/env/.config)
+[[ -n "$TS_SEARCH_PATHS" ]] || TS_SEARCH_PATHS=(~/ ~/source ~/source/repos/dotfiles/env/.config)
 
 # Add any extra search paths to the TS_SEARCH_PATHS array
 # e.g : EXTRA_SEARCH_PATHS=("$HOME/extra1:4" "$HOME/extra2")
