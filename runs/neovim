@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-sudo pacman -S neovim wl-clipboard
+sudo pacman -S --noconfirm --needed fd neovim tree-sitter-cli unzip wget wl-clipboard

@@ -124,3 +124,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# nvm
+. /usr/share/nvm/init-nvm.sh
