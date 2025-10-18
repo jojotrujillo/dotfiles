@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Move this file to ~/.local/bin so that we don't need to set ~/.local/scripts onto PATH
+# to avoid accidental, destructive file operations.
+
+usage() {
+  cat <<EOF
+Usage: $(basename "$0") [-d] [-r] [-s LEVEL]
+
+Flags:
+  -d         Save current external monitor brightness to $CONFIG_FILE
+  -r         Reset external monitors brightness to previous LEVEL
+  -s LEVEL   Set brightness for external monitors. LEVEL can be:
+             - a value 0-100 (percent) e.g., 75
+
+Examples:
+  $(basename "$0") -d            # save current brightness to config
+  $(basename "$0") -r            # reset to default  
+  $(basename "$0") -s 80        # set to 80% brightness
+EOF
+}
+
+LOG_FILENAME="$HOME/.local/share/ddcutil-dual/external-monitor-settings.log"
+
+if [ "$1" == "-d" ]; then
+  echo  "Dumping current external monitor's settings file."
+  ddcutil dumpvcp $LOG_FILENAME
+elif [ "$1" == "-r" ]; then
+  echo "Resetting external monitor's previous settings."
+  PREVIOUS_BRIGHTNESS_VALUE=$(awk '$1=="VCP" && $2=="10" { print $3 }' $LOG_FILENAME)
+  ddcutil --bus=20 setvcp 10 $PREVIOUS_BRIGHTNESS_VALUE
+  ddcutil --bus=21 setvcp 10 $PREVIOUS_BRIGHTNESS_VALUE
+elif [ "$1" == "-s" ]; then
+  echo "Setting external monitor's brightness settings to $2."
+  ddcutil --bus=20 setvcp 10 $2
+  ddcutil --bus=21 setvcp 10 $2
+else
+  usage
+  exit 0
+fi
+
+exit 0
