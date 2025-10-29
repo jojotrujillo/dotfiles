@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-paru -S breezex-cursor-theme btop ddcutil dolphin fastfetch ffmpeg4.4 hypridle hyprlock hyprsunset hyprsysteminfo kvantum \
+paru -S breezex-cursor-theme btop ddcutil dolphin fastfetch ffmpeg4.4 hypridle hyprlock hyprsunset kvantum \
 	mako noto-fonts noto-fonts-cjk noto-fonts-emoji otf-font-awesome papirus-icon-theme pavucontrol \
 	power-profiles-daemon python-gobject qt6ct-kde spotify ttf-font-awesome ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols \
 	waybar zenity
