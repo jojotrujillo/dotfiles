@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+paru -S alacritty ffmpeg jp2a --noconfirm --needed
